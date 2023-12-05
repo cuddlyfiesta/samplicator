@@ -168,6 +168,7 @@ make_recv_socket (ctx)
      struct samplicator_context *ctx;
 {
   struct addrinfo hints, *res;
+  int so_reuseport_val = 1;
   int result;
 
   init_hints_from_preferences (&hints, ctx);
