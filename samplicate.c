@@ -185,9 +185,15 @@ make_recv_socket (ctx)
 	  break;
 	}
       if (setsockopt (ctx->fsockfd, SOL_SOCKET, SO_RCVBUF,
-		      (char *) &ctx->sockbuflen, sizeof ctx->sockbuflen) == -1)
+		 (char *) &ctx->sockbuflen, sizeof ctx->sockbuflen) == -1)
 	{
 	  fprintf (stderr, "Warning: setsockopt(SO_RCVBUF,%ld) failed: %s\n",
+		   ctx->sockbuflen, strerror (errno));
+	}
+     if (setsockopt (ctx->fsockfd, SOL_SOCKET, SO_REUSEPORT,
+		&so_reuseport_val, sizeof(so_reuseport_val)) != 0)
+	{
+	  fprintf (stderr, "Warning: setsockopt(SO_REUSEPORT,%ld) failed: %s\n",
 		   ctx->sockbuflen, strerror (errno));
 	}
       if (bind (ctx->fsockfd,
